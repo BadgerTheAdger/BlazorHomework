@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "hJcAMYD9nN4sHc10XNNnkdytWHgEiTB2Tvy1MIB4tDw5MNg1zD5pyG7nE9ZIaNv/UBosSB04rO9+x/+KGQr6jA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\v-vmark\\source\\repos\\Delivery1\\Delivery1.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\v-vmark\\.nuget\\packages\\system.net.http.json\\3.2.1\\system.net.http.json.3.2.1.nupkg.sha512",
+    "C:\\Users\\v-vmark\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512"
+  ],
+  "logs": []
+}

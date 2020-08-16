@@ -1,0 +1,94 @@
+﻿@page "/counter"
+@inject AClient client
+
+<h1>Data explorer</h1>
+
+<EditForm Model="@currentState" OnValidSubmit="OnSubmit">
+    <label>
+        UserId:
+        <InputNumber @bind-Value="currentState.UserId"></InputNumber>
+    </label>
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+</EditForm>
+
+@if (!albums.Any())
+{
+    <h2>Please specify userid..</h2>
+}
+else
+{
+    <EditForm Model="@currentState" OnValidSubmit="@AlbumsSubmit">
+        <InputSelectNumber @bind-Value="currentState.AlbumId">
+            @foreach (var i in albums)
+                {
+                <option value="@i.Id">@i.Title</option>
+                }
+        </InputSelectNumber>
+
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </EditForm>
+}
+
+@if (photos.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Photo</th>
+                <th scope="col">Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var counter = 0;
+                foreach (var p in photos)
+                {
+                    counter++;
+                    <tr>
+                        <th scope="row">@counter</th>
+                        <td>@p.Title</td>
+                        <td><img src="@p.Url" /></td>
+                        <td>
+                            @if (comments.Any(i => i.PostId == p.Id))
+                            {
+                                foreach (var comment in comments)
+                                {   
+                                    <ul>@comment.Body</ul>
+                                }
+                                <button class="btn btn-info" @onclick="@(() => HideComments(p.Id))">Hide</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-outline-info" @onclick="@(() => ExpandComments(p.Id))">Expand</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Album> albums = new List<Album>();
+    private IEnumerable<Photo> photos = new List<Photo>();
+    private List<Comment> comments = new List<Comment>();
+    private CurrentState currentState = new CurrentState();
+
+    private void ExpandComments(int photoId) => comments.AddRange(client.GetComments(photoId));
+
+    private void HideComments(int photoId) => comments.RemoveAll(i => i.PostId == photoId);
+
+    private void AlbumsSubmit()
+    {
+        photos = client.GetPhotos(currentState);
+    }
+
+    private void OnSubmit()
+    {
+        albums = client.GetAlbums(currentState);
+    }
+}
